@@ -33,19 +33,17 @@ def update_lambda(lambda_):
     lambda_.data = new_lambda
 
 
-def pprint(i, x, lambda_):
-    print(
-        f'\n{i+1}th iter, L:{lagrangian_function(x, lambda_):.2f}, f: {f(x):.2f}'
-    )
+def pprint(i, x, lambda_, epoch):
+    print(f'\n{i}/{epoch}, L:{lagrangian_function(x, lambda_):.2f}, f(x): {f(x):.2f}')
     print(f'x: {x}')
     print(f'lambda: {lambda_}')
-    print("constraints violation: ")
-    print(A @ x - b)
+    print("constraints violation: " + str(A @ x - b))
 
 
 def solve(x, lambda_):
-    for i in range(500):
-        pprint(i, x, lambda_)
+    epoch = 500
+    for i in range(epoch):
+        pprint(i + 1, x, lambda_, epoch)
         update_x(x, lambda_)
         update_lambda(lambda_)
 

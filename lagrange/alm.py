@@ -32,9 +32,7 @@ def update_lambda(lambda_):
 
 
 def pprint(i, x, lambda_, epoch):
-    print(
-        f'\n{i}/{epoch}, L:{lagrangian_function(x, lambda_):.2f}, f: {f(x):.2f}'
-    )
+    print(f'\n{i}/{epoch}, L:{lagrangian_function(x, lambda_):.2f}, f(x): {f(x):.2f}')
     print(f'x: {x}')
     print(f'lambda: {lambda_}')
     print("constraints violation: " + str(A @ x - b))
@@ -61,7 +59,7 @@ if __name__ == '__main__':
                      dtype=torch.float32)
     b = torch.tensor([4, 12, 18], dtype=torch.float32)
 
-    lambda_ = torch.tensor([0, 0, 0], dtype=torch.float32)
-    x = torch.tensor([2, 0, 2, 0, 0], dtype=torch.float32, requires_grad=True)
+    lambda_ = torch.tensor([0, 0, 0], dtype=torch.float32)  # set the same dimension as b for lambda_
+    x = torch.tensor([2, 0, 0, 0, 0], dtype=torch.float32, requires_grad=True)  # set random original value for iterating
 
     solve(x, lambda_)

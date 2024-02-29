@@ -22,30 +22,29 @@ def update_x(x):
     """ update x with gradient descent """
     new_x = x - eta * x.grad
     x.data = new_x.clamp(min=0)
+    x.grad.zero_()
 
 
 def update_lambda(lambda_):
     new_lambda = lambda_ - lambda_.grad
     lambda_.data = new_lambda
+    lambda_.grad.zero_()
 
 
-def pprint(i, x, lambda_):
-    print(
-        f'\n{i+1}th iter, L:{lagrangian_function(x, lambda_):.2f}, f: {f(x):.2f}')
+def pprint(i, x, lambda_, epoch):
+    print(f'\n{i}/{epoch}, L:{lagrangian_function(x, lambda_):.2f}, f(x): {f(x):.2f}')
     print(f'x: {x}')
     print(f'lambda: {lambda_}')
-    print("constraints violation: ")
-    print(A @ x - b)
+    print("constraints violation: " + str(A @ x - b))
 
 
 def solve(x, lambda_):
-    for i in range(100):
-        pprint(i, x, lambda_)
+    epoch = 100
+    for i in range(epoch):
+        pprint(i, x, lambda_, epoch)
         lagrangian_function(x, lambda_).backward()
         update_x(x)
         update_lambda(lambda_)
-        x.grad.zero_()
-        lambda_.grad.zero_()
 
 
 if __name__ == '__main__':

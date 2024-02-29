@@ -20,17 +20,22 @@ def f(x):
 
 def update_x(x, lambda_):
     """ update x with gradient descent """
-    for i in range(len(x)):
-        # not the best way to calculate gradient
-        lagrangian_function(x, lambda_).backward()
-        x_i = x[i] - eta * x.grad[i]
-        x.data[i] = max(0, x_i)
-        x.grad.zero_()
+
+    lagrangian_function(x, lambda_).backward()
+    new_x = x - eta * x.grad
+    x.data = new_x.clamp(min=0)  # ensure x not lower than zero
+    x.grad.zero_()
+
+    # for i in range(len(x)):
+    #     # not the best way to calculate gradient
+    #     lagrangian_function(x, lambda_).backward()
+    #     x_i = x[i] - eta * x.grad[i]
+    #     x.data[i] = max(0, x_i)
+    #     x.grad.zero_()
 
 
 def update_lambda(lambda_):
-    new_lambda = lambda_ + alpha * (A @ x - b)
-    lambda_.data = new_lambda
+    lambda_.data = lambda_ + alpha * (A @ x - b)
 
 
 def pprint(i, x, lambda_, epoch):
@@ -51,11 +56,13 @@ def solve(x, lambda_):
 if __name__ == '__main__':
     eta = 0.03
     alpha = 1
+
     """
     min f(x) = c^T x
     s.t. Ax = b
     x >= 0
     """
+
     c = torch.tensor([-3, -5, 0, 0, 0], dtype=torch.float32)
     A = torch.tensor([[1, 0, 1, 0, 0], [0, 2, 0, 1, 0], [3, 2, 0, 0, 1]],
                      dtype=torch.float32)

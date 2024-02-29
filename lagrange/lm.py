@@ -26,8 +26,7 @@ def update_x(x):
 
 
 def update_lambda(lambda_):
-    new_lambda = lambda_ - lambda_.grad
-    lambda_.data = new_lambda
+    lambda_.data = lambda_ - lambda_.grad
     lambda_.grad.zero_()
 
 

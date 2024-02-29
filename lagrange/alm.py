@@ -27,8 +27,7 @@ def update_x(x, lambda_):
 
 
 def update_lambda(lambda_):
-    new_lambda = lambda_ + alpha * (A @ x - b)
-    lambda_.data = new_lambda
+    lambda_.data = lambda_ + alpha * (A @ x - b)
 
 
 def pprint(i, x, lambda_, epoch):
